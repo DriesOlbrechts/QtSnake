@@ -5,6 +5,8 @@
 #include <QEventLoop>
 #include <QTimer>
 #include <QDebug>
+#include <QStandardPaths>
+#include <QDir>
 
 GameController::GameController(QWidget *parent)
     : QGraphicsView(parent)
@@ -43,16 +45,22 @@ void GameController::start(){
 void GameController::handleLost(){
   timer->stop();
   int topScore = 0;
+  QDir dir(QStandardPaths::writableLocation(QStandardPaths::AppDataLocation));
+  if(!dir.exists()) dir.mkpath(".");
   QFile scoreFile(this->filePath);
 
   if (scoreFile.open(QIODevice::ReadWrite | QIODevice::Text)) {
     QTextStream score(&scoreFile);
     QString line = score.readLine();
-    if(line != "") topScore = line.toInt();
+    if(line != "") {
+        topScore = line.toInt();
+        this->highScore = topScore;
+    }
     if(this->score > topScore){
         scoreFile.resize(0);
         scoreFile.write(QString::number(this->score).toUtf8());
         this->newhigh = true;
+        this->highScore = this->score;
     }
 
     scoreFile.close();

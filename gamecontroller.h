@@ -21,6 +21,7 @@ public:
 
     int score = 0;
     bool newhigh = false;
+    int highScore = 0;
 private:
     QTimer *timer;
     SnakeHead* snakehead;

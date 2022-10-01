@@ -6,6 +6,7 @@
 #include <QFileDialog>
 #include <QGridLayout>
 #include <QSound>
+#include <QStandardPaths>
 GameController *game;
 MainWindow::MainWindow(QWidget *parent)
     : QMainWindow(parent), ui(new Ui::MainWindow) {
@@ -39,10 +40,11 @@ void MainWindow::setButtonColor(QPushButton *button, QColor color) {
 
 void MainWindow::on_startGame_clicked() {
   QColor tempColor = game->color;
-  QString tempPath = game->filePath;
   game = new GameController();
   game->color = tempColor;
-  game->filePath = tempPath;
+  game->filePath =
+      QDir(QStandardPaths::writableLocation(QStandardPaths::AppDataLocation))
+          .filePath("highscore.txt");
   game->show();
   game->raise();
   game->setFocus();
@@ -51,22 +53,12 @@ void MainWindow::on_startGame_clicked() {
   connect(game, &GameController::scoreSaved, this, &MainWindow::gameLost);
 }
 
-void MainWindow::on_selectFile_clicked() {
-  game->filePath =
-      QFileDialog::getOpenFileName(this, tr("Select .txt score file"),
-                                   QDir::homePath(), tr("txt file (*.txt)"));
-  if (game->filePath != "") {
-    this->ui->startGame->setEnabled(true);
-  } else {
-    this->ui->startGame->setEnabled(false);
-  }
-}
-
 void MainWindow::gameLost() {
   QPointF middle;
   QGraphicsTextItem *diedText;
   QGraphicsTextItem *scoreText;
   QGraphicsTextItem *highScoreText;
+  QGraphicsTextItem *currentHighScoreText;
   QPointF tempPos;
 
   game->scene = new QGraphicsScene(0, 0, 800, 600);
@@ -108,4 +100,15 @@ void MainWindow::gameLost() {
     tempPos.setX(middle.x() - (highScoreText->boundingRect().width()) / 2);
     highScoreText->setPos(tempPos);
   }
+
+  //current highscore text
+  currentHighScoreText = game->scene->addText("Highscore: " + QString::number(game->highScore));
+  currentHighScoreText->setTransformOriginPoint(currentHighScoreText->boundingRect().center());
+  currentHighScoreText->setScale(2);
+  currentHighScoreText->setDefaultTextColor(Qt::black);
+  tempPos = middle;
+  tempPos.setX(middle.x() - (currentHighScoreText->boundingRect().width())/2);
+  tempPos.setY(tempPos.y() + 70);
+  currentHighScoreText->setPos(tempPos);
+
 }

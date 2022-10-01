@@ -18,12 +18,11 @@ void Food::setRandomPos() {
   this->hide();
   int maxX = game->viewport()->width();
   int maxY = game->viewport()->height();
-  qDebug() << maxX << " " << maxY;
   bool valid = false;
   int count = 0;
   int randomX, randomY;
   while (!valid) {
-    // Handle game won message + better way of figuring out when no spots
+    // TODO: better way of figuring out when no spots
     // available
     if (count >= 200) {
         emit game->gameLost();
@@ -33,12 +32,10 @@ void Food::setRandomPos() {
 
     this->setPos(randomX, randomY);
     QList<QGraphicsItem *> cItems = collidingItems();
-    qDebug() << "Colliding: " << cItems.length();
     if (cItems.length() == 0) {
       valid = true;
     }
     count++;
   }
-  qDebug() << randomX << " " << randomY;
   this->show();
 }

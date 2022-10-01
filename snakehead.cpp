@@ -42,23 +42,23 @@ void SnakeHead::keyPressEvent(QKeyEvent *event) {
   if(handlingInput) return;
   handlingInput = true;
   // move up
-  if (event->key() == Qt::Key_Up && this->currentDir != Direction::DOWN) {
+  if ((event->key() == Qt::Key_Up || event->key() == Qt::Key_W || event->key() == Qt::Key_K) && this->currentDir != Direction::DOWN) {
       changeDirection(Direction::UP);
      }
 
   // move down
-  if (event->key() == Qt::Key_Down && this->currentDir != Direction::UP) {
+  if ((event->key() == Qt::Key_Down || event->key() == Qt::Key_S || event->key() == Qt::Key_J) && this->currentDir != Direction::UP) {
       changeDirection(Direction::DOWN);
   }
 
 
   // move right
-  if (event->key() == Qt::Key_Right && this->currentDir != Direction::LEFT) {
+  if ((event->key() == Qt::Key_Right || event->key() == Qt::Key_D || event->key() == Qt::Key_L) && this->currentDir != Direction::LEFT) {
       changeDirection(Direction::RIGHT);
   }
 
   // move left
-  if (event->key() == Qt::Key_Left && this->currentDir != Direction::RIGHT) {
+  if ((event->key() == Qt::Key_Left || event->key() == Qt::Key_A || event->key() == Qt::Key_H) && this->currentDir != Direction::RIGHT) {
       changeDirection(Direction::LEFT);
   }
 
