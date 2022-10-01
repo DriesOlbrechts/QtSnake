@@ -1,5 +1,7 @@
 <RCC>
     <qresource prefix="/">
         <file>media/color-picker.png</file>
+        <file>media/hs1.wav</file>
+        <file>media/hs2.wav</file>
     </qresource>
 </RCC>

@@ -6,5 +6,6 @@
 class Food: public QGraphicsEllipseItem{
 public:
     Food(QGraphicsItem* parent=NULL);
+    void setRandomPos();
 };
 #endif // FOOD_H

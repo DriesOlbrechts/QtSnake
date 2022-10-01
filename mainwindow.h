@@ -23,6 +23,9 @@ private slots:
 
     void on_startGame_clicked();
 
+    void on_selectFile_clicked();
+    void gameLost();
+
 private:
     Ui::MainWindow *ui;
     void setButtonColor(QPushButton*, QColor);
