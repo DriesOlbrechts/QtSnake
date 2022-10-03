@@ -86,4 +86,8 @@ compile_commands.json
 *.cxxflags
 *.cflags
 
+#Ignore .exe build
+*.exe
+exe/
+build/
 
