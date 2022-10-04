@@ -42,12 +42,12 @@ WORKDIR /build
 RUN git clone https://github.com/mxe/mxe.git
 
 # Build mxe with the necesary packages
-#RUN cd mxe && make download-qtbase download-qtmultimedia --jobs=2
-RUN cd mxe && make download-qt5 --jobs=4
+RUN cd mxe && make download-qtbase download-qtmultimedia --jobs=2
+#RUN cd mxe && make download-qt5 --jobs=4
 
-#RUN cd mxe && make qtbase MXE_TARGETS="x86_64-w64-mingw32.static" MXE_USE_CCACHE=
-#RUN cd mxe && make qtmultimedia MXE_TARGETS="x86_64-w64-mingw32.static" MXE_USE_CCACHE=
-RUN cd mxe && make qt5 MXE_TARGETS="x86_64-w64-mingw32.static" MXE_USE_CCACHE=
+RUN cd mxe && make qtbase MXE_TARGETS="x86_64-w64-mingw32.static" MXE_USE_CCACHE=
+RUN cd mxe && make qtmultimedia MXE_TARGETS="x86_64-w64-mingw32.static" MXE_USE_CCACHE=
+#RUN cd mxe && make qt5 MXE_TARGETS="x86_64-w64-mingw32.static" MXE_USE_CCACHE=
 
 # Add mxe to path
 ENV PATH /build/mxe/usr/bin:$PATH
@@ -55,14 +55,3 @@ ENV PATH /build/mxe/usr/bin:$PATH
 
 # Add alias for qmake
 RUN ln -s /build/mxe/usr/bin/x86_64-w64-mingw32.static-qmake-qt5 /build/mxe/usr/bin/qmake
-
-# COPY source files to image
-RUN mkdir /src
-COPY . /src
-
-# Set workdir to /src for ease
-WORKDIR /src
-
-#Build project
-RUN qmake
-RUN make

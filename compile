@@ -1,0 +1,11 @@
+#!/bin/bash -x
+#
+# This simple script builds the the application for Windows
+# using a cross compiler.
+#
+#build project
+
+docker run -i --workdir="/src" -v "$(pwd):/src" qt bash -c 'qmake && make' 
+
+# Now extract the generated binary
+#create build directory if it doesnt exist
