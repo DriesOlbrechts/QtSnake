@@ -36,11 +36,16 @@ I chose to cross compile inside a container to save myself from future headaches
 
     2. We clone MXE from the git repository into the build folder.
 
-    3. Now we build mxe with the necesary packages. In my case this is `qtbase` for the core of qt and also `qtmultimedia` because I play a sound file.
-    
-    4. When the build process is complete we have to add MXE to path
+    3. First we have to install the packages, doing this in a seperate step ensures the downloads are cached and won't be redone if we change anything below this point.
+        In my case this is `qtbase` for the core of qt and also `qtmultimedia` because I play a sound file.
+        I went with `qt5` in the actual build
 
-    5. Then we add an alias for the cross-compiling binary we just made called `qmake`. This just makes it easier to use.
+    4. Now we build mxe with the necesary packages. I disabled ccache because it would only slow the process down in this case. 
+    We set the target to 64 bit windows.
+
+    5. When the build process is complete we have to add MXE to path
+
+    6. Then we add an alias for the cross-compiling binary we just made called `qmake`. This just makes it easier to use.
     
     ```Dockerfile
     # clone mxe to build directory
@@ -48,15 +53,25 @@ I chose to cross compile inside a container to save myself from future headaches
     WORKDIR /build
     RUN git clone https://github.com/mxe/mxe.git
     
-    # Build mxe with the necesary packages
-    RUN cd mxe && make qtbase qtmultimedia
+    # Download the necesary packages
+    # This commented line should work but I ran using qt5 because I had it enabled for testing
+    # The issue turned out to be something code related but it built and I didn't want to recompile for a small optimization 
+    # RUN cd mxe && make download-qtbase download-qtmultimedia --jobs=2
+    # I am running with 4 jobs to speed up the process
+
+    RUN cd mxe && make download-qt5 --jobs=4
+
+    # Build the downloaded packages
+
+    RUN cd mxe && make qt5 MXE_TARGETS="x86_64-w64-mingw32.static" MXE_USE_CCACHE=
+
     
     # Add mxe to path
     ENV PATH /build/mxe/usr/bin:$PATH
     
     
     # Add alias for qmake
-    RUN ln -s /build/mxe/usr/bin/i686-w64-mingw32.static-qmake-qt5 /build/mxe/usr/bin/qmake
+    RUN ln -s /build/mxe/usr/bin/x86_64-w64-mingw32.static-qmake-qt5 /build/mxe/usr/bin/qmake
 
     ```
 - Copying source

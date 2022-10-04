@@ -11,13 +11,14 @@
 class GameController : public QGraphicsView
 {
     Q_OBJECT
-public:
-    explicit GameController(QWidget *parent = nullptr);
+public:    explicit GameController(QWidget *parent = nullptr);
     ~GameController();
     void start();
     QGraphicsScene* scene;
     QColor color = Qt::cyan;
     QString filePath;
+
+    void keyPressEvent(QKeyEvent* event);
 
     int score = 0;
     bool newhigh = false;

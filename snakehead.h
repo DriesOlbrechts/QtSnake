@@ -27,7 +27,7 @@ public:    // constructors
 
     Direction currentDir = Direction::NONE;
     // events
-    void keyPressEvent(QKeyEvent* event);
+//    void keyPressEvent(QKeyEvent* event);
 
     // public method
     void elongate();
@@ -35,10 +35,12 @@ public:    // constructors
     void handleDirection();
     void changeDirection(Direction);
     int getScore();
+
+
+    bool handlingInput = false;
 private:
     QList<SnakeBody*> snakeBodies;
     QPointF prevPos;
-    bool handlingInput = false;
     bool started = false;
     Food* food;
 signals:

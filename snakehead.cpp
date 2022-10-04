@@ -2,9 +2,9 @@
 #include "food.h"
 #include "gamecontroller.h"
 #include "snakebody.h"
+#include <QApplication>
 #include <QBrush>
 #include <QDebug>
-#include <QApplication>
 
 extern GameController *game;
 
@@ -26,43 +26,14 @@ SnakeHead::SnakeHead(QGraphicsItem *parent) {
   snakeBodies.prepend(b1);
 }
 
-SnakeHead::~SnakeHead(){
-    for(SnakeBody* body : snakeBodies){
-        delete body;
-    }
-    delete food;
+SnakeHead::~SnakeHead() {
+  for (SnakeBody *body : qAsConst(snakeBodies)) {
+    delete body;
+  }
+  delete food;
 }
 
-
-int SnakeHead::getScore(){
-    return game->score;
-}
-void SnakeHead::keyPressEvent(QKeyEvent *event) {
-
-  if(handlingInput) return;
-  handlingInput = true;
-  // move up
-  if ((event->key() == Qt::Key_Up || event->key() == Qt::Key_W || event->key() == Qt::Key_K) && this->currentDir != Direction::DOWN) {
-      changeDirection(Direction::UP);
-     }
-
-  // move down
-  if ((event->key() == Qt::Key_Down || event->key() == Qt::Key_S || event->key() == Qt::Key_J) && this->currentDir != Direction::UP) {
-      changeDirection(Direction::DOWN);
-  }
-
-
-  // move right
-  if ((event->key() == Qt::Key_Right || event->key() == Qt::Key_D || event->key() == Qt::Key_L) && this->currentDir != Direction::LEFT) {
-      changeDirection(Direction::RIGHT);
-  }
-
-  // move left
-  if ((event->key() == Qt::Key_Left || event->key() == Qt::Key_A || event->key() == Qt::Key_H) && this->currentDir != Direction::RIGHT) {
-      changeDirection(Direction::LEFT);
-  }
-
-}
+int SnakeHead::getScore() { return game->score; }
 
 void SnakeHead::elongate() {
   // add new SnakeBody to list
@@ -75,9 +46,9 @@ void SnakeHead::elongate() {
 }
 
 void SnakeHead::moveBodies() {
-    if(!this->started){
-        this->started = true;
-    }
+  if (!this->started) {
+    this->started = true;
+  }
   // traverses through list of bodies and moves them properly
 
   // move all bodies from back to front
@@ -114,11 +85,13 @@ void SnakeHead::handleDirection() {
     xPos = x();
     yPos = y();
   default:
-      break;
+    break;
   }
-  QPointF newPos(xPos,yPos);
+
+  QPointF newPos(xPos, yPos);
   setPos(newPos);
-  if(currentDir != Direction::NONE) moveBodies();
+  if (currentDir != Direction::NONE)
+    moveBodies();
 
   // elongate if collides with Fruit
   QList<QGraphicsItem *> cItems = collidingItems();
@@ -127,16 +100,15 @@ void SnakeHead::handleDirection() {
     if (typeid(temp) == typeid(Food)) {
       // fruit found in collision list
       elongate();
-      this->food = dynamic_cast<Food*>(cItems[i]);
+      this->food = dynamic_cast<Food *>(cItems[i]);
       game->score++;
       emit scoreChanged();
-      if(this->food->isVisible()){
+      if (this->food->isVisible()) {
         this->food->setRandomPos();
       }
-    }
-    else if (typeid(temp) == typeid(SnakeBody) && this->started){
-         emit game->gameLost();
-         return;
+    } else if (typeid(temp) == typeid(SnakeBody) && this->started) {
+      emit game->gameLost();
+      return;
     }
   }
 
@@ -172,7 +144,7 @@ void SnakeHead::handleDirection() {
     default:
       break;
     }
-    QPointF opposite(xPos,yPos);
+    QPointF opposite(xPos, yPos);
     setPos(opposite);
     if (currentDir != Direction::NONE)
       moveBodies();
@@ -181,6 +153,6 @@ void SnakeHead::handleDirection() {
   handlingInput = false;
 }
 
-void SnakeHead::changeDirection(Direction direction){
-   this->currentDir = direction;
+void SnakeHead::changeDirection(Direction direction) {
+  this->currentDir = direction;
 }
