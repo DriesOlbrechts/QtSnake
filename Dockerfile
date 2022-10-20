@@ -1,7 +1,7 @@
 FROM ubuntu:22.04
 # install requirements
-RUN apt-get update
-RUN apt-get install -y --no-install-recommends \
+RUN apt update
+RUN apt install -y --no-install-recommends \
     autoconf \
     automake \
     autopoint \
@@ -43,11 +43,9 @@ RUN git clone https://github.com/mxe/mxe.git
 
 # Build mxe with the necesary packages
 RUN cd mxe && make download-qtbase download-qtmultimedia --jobs=2
-#RUN cd mxe && make download-qt5 --jobs=4
 
 RUN cd mxe && make qtbase MXE_TARGETS="x86_64-w64-mingw32.static" MXE_USE_CCACHE=
 RUN cd mxe && make qtmultimedia MXE_TARGETS="x86_64-w64-mingw32.static" MXE_USE_CCACHE=
-#RUN cd mxe && make qt5 MXE_TARGETS="x86_64-w64-mingw32.static" MXE_USE_CCACHE=
 
 # Add mxe to path
 ENV PATH /build/mxe/usr/bin:$PATH

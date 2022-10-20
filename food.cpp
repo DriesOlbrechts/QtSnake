@@ -29,6 +29,8 @@ void Food::setRandomPos() {
     }
     randomX = QRandomGenerator::global()->bounded(50, maxX - 50);
     randomY = QRandomGenerator::global()->bounded(50, maxY - 50);
+    randomX = randomX + (50 -  (randomX % 50 ?: 50));
+    randomY = randomY + (50 -  (randomY % 50 ?: 50));
 
     this->setPos(randomX, randomY);
     QList<QGraphicsItem *> cItems = collidingItems();

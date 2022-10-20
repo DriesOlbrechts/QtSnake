@@ -7,7 +7,7 @@
 #include <QGridLayout>
 #include <QStandardPaths>
 #include <QTimer>
-
+#include <iostream>
 GameController::GameController(QWidget *parent) : QGraphicsView(parent) {
   this->setBackgroundBrush(Qt::green);
   scene = new QGraphicsScene(0, 0, 800, 600);
